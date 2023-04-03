@@ -46,17 +46,9 @@ class LongTemperature(models.Model):
 class WideTemperature(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     timestamp = models.DateTimeField()
-    temp_inst_celsius = models.FloatField(null=True, blank=True)
-    temp_inst_fahrenheit = models.FloatField(null=True, blank=True)
-    temp_inst_kelvin = models.FloatField(null=True, blank=True)
-
-    temp_max24_celsius = models.FloatField(null=True, blank=True)
-    temp_max24_fahrenheit = models.FloatField(null=True, blank=True)
-    temp_max24_kelvin = models.FloatField(null=True, blank=True)
-
-    temp_min24_celsius = models.FloatField(null=True, blank=True)
-    temp_min24_fahrenheit = models.FloatField(null=True, blank=True)
-    temp_min24_kelvin = models.FloatField(null=True, blank=True)
+    temp_inst_c = models.FloatField(null=True, blank=True)
+    temp_max24_c = models.FloatField(null=True, blank=True)
+    temp_min24_c = models.FloatField(null=True, blank=True)
 
 
 class LongWind(models.Model):
@@ -87,16 +79,8 @@ class WideWind(models.Model):
     timestamp = models.DateTimeField()
     wind_speed_10m_ms = models.FloatField(null=True, blank=True)
     wind_dir_10_d = models.FloatField(null=True, blank=True)
-
     wind_gusts_10m_1h_ms = models.FloatField()
-    wind_gusts_10m_1h_bft = models.FloatField()
-    wind_gusts_10m_1h_kmh = models.FloatField()
-    wind_gusts_10m_1h_kn = models.FloatField()
-
     wind_gusts_10m_24h_ms = models.FloatField()
-    wind_gusts_10m_24h_bft = models.FloatField()
-    wind_gusts_10m_24h_kmh = models.FloatField()
-    wind_gusts_10m_24h_kn = models.FloatField()
 
 
 class WideOther(models.Model):
@@ -110,3 +94,11 @@ class WideOther(models.Model):
     uv_idx = models.FloatField(null=True, blank=True)
     sunrise = models.DateTimeField(null=True, blank=True)
     sunset = models.DateTimeField(null=True, blank=True)
+
+
+class LongOther(models.Model):
+    wide_other = models.ForeignKey(WideOther, on_delete=models.CASCADE)
+    parameter = models.CharField(max_length=255)
+    value = models.FloatField(null=True, blank=True)
+    timestamp = models.DateTimeField()
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)

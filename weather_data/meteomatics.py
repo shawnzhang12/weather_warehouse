@@ -1,11 +1,9 @@
 import os
 import requests
-from dotenv import load_dotenv
 import pandas as pd
 from datetime import datetime
-from .models import Location, Landing, LongTemperature, LongWind, WideTemperature, WideWind, WideOther
+from .models import Location, Landing, LongTemperature, LongWind, WideTemperature, WideWind, WideOther, LongOther
 
-load_dotenv(os.path.join("..", '.env'))
 
 BASE_URL = "https://api.meteomatics.com"
 USERNAME = os.environ.get("METEO_USER")
@@ -13,11 +11,10 @@ PASSWORD = os.environ.get("METEO_PASSWORD")
 
 # Fix the time period, too many options for the time scope
 # Example params: temperature_2m:C,precipitation_sum_1h:mm,wind_speed_10m:ms
-def fetch_weather_data(location, start_time, params, end_time=""):
-    if end_time == "":
-        url = f"{BASE_URL}/{start_time}:PT1H/{location.latitude},{location.longitude}:{params}"
-    else:
-        url = f"{BASE_URL}/{start_time}--{end_time}:PT1H/{location.latitude},{location.longitude}:{params}"
+def fetch_weather_data(time, params, location, format="json"):
+
+    url = f"{BASE_URL}/{time}/{params}/{location.latitude},{location.longitude}/{format}"
+
     headers = {
         "Authorization": f"Basic {USERNAME}:{PASSWORD}"
     }
@@ -111,24 +108,3 @@ def save_and_transform_data(location, raw_data):
         wide_data.append(wide_entry)
 
     return wide_data
-
-
-def save_data_to_long_temperature(location, timestamp, temperature_data):
-    # Your implementation to save data to LongTemperature model
-    pass
-
-def save_data_to_long_wind(location, timestamp, wind_data):
-    # Your implementation to save data to LongWind model
-    pass
-
-def save_data_to_wide_temperature(location, timestamp, wide_temperature_data):
-    # Your implementation to save data to WideTemperature model
-    pass
-
-def save_data_to_wide_wind(location, timestamp, wide_wind_data):
-    # Your implementation to save data to WideWind model
-    pass
-
-def save_data_to_wide_other(location, timestamp, wide_other_data):
-    # Your implementation to save data to WideOther model
-    pass
